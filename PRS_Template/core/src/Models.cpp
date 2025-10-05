@@ -1,33 +1,14 @@
-//
-// Created by paul on 10/2/25.
-//
-
 #include "../include/Models.h"
-
 #include <cmath>
 #include <iostream>
 #include <vector>
 
-#include "../include/Coordinates.h"
-
-void Models::build_coordinates() {
-    FILE *file = fopen(file_path, "r");
-    float x, y;
-    int no_coord = 0;
-
-    fscanf(file, "%d", &no_coord);
-    std::cout << no_coord << std::endl;
-
-    for (auto &coordinate: coordinates) {
-        fscanf(file, "%f %f", &x, &y);
-        coordinate = std::make_pair(x, y);
-    }
-    coordinates_size = coordinates.size();
-
-    fclose(file);
-}
+#include "Coordinates.h"
+#include "common.h"
 
 void Models::init() {
+    coordinates_size = build_coordinates_from_file();
+
     for (auto &[fst, snd]: coordinates) {
         sum_xy += fst * snd;
         sum_x += fst;
@@ -38,11 +19,11 @@ void Models::init() {
 
     sum_x_sqrt = sum_x * sum_x;
     sum_y_sqrt = sum_y * sum_y;
-
-    build_coordinates();
 }
 
-Models::Models(const char *argv) : file_path(argv){
+Models::Models(const Type type, const char *argv) : logger("model_logger.txt"),
+                                                    type(type),
+                                                    file_path(argv) {
 }
 
 std::pair<float, float> Models::model_1() const {
@@ -66,4 +47,10 @@ std::pair<float, float> Models::model_2() const {
     float rho = (cos(beta) * sum_x + sin(beta) * sum_y) / coordinates_size;
 
     return {beta, rho};
+}
+
+std::pair<float, float> Models::compute_with_model() const {
+    return (type == Type::LINEAR)
+               ? model_1()
+               : model_2();
 }

@@ -6,7 +6,7 @@
 
 class Coordinates {
 public:
-    explicit Coordinates(const char *argv) : models(Models(argv)) {
+    explicit Coordinates(const char *argv) : models(Models(Models::Type::LINEAR, argv)) {
     }
 
     ~Coordinates() = default;
@@ -16,8 +16,6 @@ public:
     void draw_points(int model);
 
 private:
-    std::vector<std::pair<float, float> > coordinates;
-    const char *file_path = nullptr;
     cv::Mat image;
     Models models;
 };

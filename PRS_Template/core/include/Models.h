@@ -6,10 +6,12 @@
 #define LAB_1_MODELS_H
 #include <vector>
 
+#include "Log.h"
+
 
 class Models {
 public:
-    explicit Models(const char *argv);
+    enum class Type { LINEAR, NORMAL };
 
     ~Models() = default;
 
@@ -17,10 +19,20 @@ public:
 
     std::pair<float, float> model_2() const;
 
+    std::pair<float, float> compute_with_model() const;
+
+    std::vector<std::pair<float, float> > get_coordinates() const {
+        return coordinates;
+    }
+
     void init();
 
+    Models(Type type, const char *argv);
+
 private:
-    void build_coordinates();
+    Log logger;
+
+    Type type;
 
     const char *file_path;
 
@@ -32,8 +44,7 @@ private:
             sum_x_sqrt{};
     float sum_y2_minus_x2{};
     float sum_y_sqrt{};
-    std::size_t coordinates_size{};
-
+    size_t coordinates_size{};
 };
 
 

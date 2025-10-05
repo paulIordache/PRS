@@ -3,12 +3,13 @@ project(lab_1)
 
 set(CMAKE_CXX_STANDARD 20)
 
+include_directories(core/include common/include)
 
 add_executable(lab_1 lab1.cpp
         core/src/Coordinates.cpp
-        core/include/Coordinates.h
         core/src/Models.cpp
-        core/include/Models.h)
+        core/src/Models.cpp
+        common/src/common.cpp)
 
 
 find_package(OpenCV REQUIRED)
